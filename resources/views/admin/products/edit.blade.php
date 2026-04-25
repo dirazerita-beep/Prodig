@@ -2,7 +2,14 @@
 @section('title', 'Edit Produk')
 
 @section('content')
-<h1 class="text-2xl font-bold text-gray-900 mb-6">Edit Produk</h1>
+<h1 class="text-2xl font-bold text-gray-900 mb-6">Edit Produk: {{ $product->title }}</h1>
+
+<div class="mb-6 border-b border-gray-200">
+    <nav class="flex space-x-8">
+        <a href="{{ route('admin.products.edit', $product) }}" class="border-b-2 border-indigo-500 text-indigo-600 px-1 pb-3 text-sm font-medium">Produk</a>
+        <a href="{{ route('admin.products.landing-page', $product) }}" class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 px-1 pb-3 text-sm font-medium">Landing Page</a>
+    </nav>
+</div>
 
 <div class="max-w-2xl">
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
