@@ -35,6 +35,7 @@
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
                         <a href="{{ route('admin.products.edit', $product) }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Edit</a>
+                        <a href="{{ route('admin.products.landing-page', $product) }}" class="text-purple-600 hover:text-purple-800 text-sm font-medium">Landing</a>
                         <form method="POST" action="{{ route('admin.products.destroy', $product) }}" onsubmit="return confirm('Hapus produk ini?')">
                             @csrf @method('DELETE')
                             <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium">Hapus</button>

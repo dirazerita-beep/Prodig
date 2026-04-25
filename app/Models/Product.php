@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Product extends Model
@@ -50,5 +51,20 @@ class Product extends Model
     public function coupons(): BelongsToMany
     {
         return $this->belongsToMany(Coupon::class, 'coupon_products')->withPivot('created_at');
+    }
+
+    public function landingPage(): HasOne
+    {
+        return $this->hasOne(ProductLandingPage::class);
+    }
+
+    public function landingPageImages(): HasMany
+    {
+        return $this->hasMany(LandingPageImage::class)->orderBy('sort_order');
+    }
+
+    public function landingPageTestimonials(): HasMany
+    {
+        return $this->hasMany(LandingPageTestimonial::class)->orderBy('sort_order');
     }
 }
