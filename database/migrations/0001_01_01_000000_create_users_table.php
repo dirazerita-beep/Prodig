@@ -17,6 +17,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('referral_code')->unique()->nullable();
+            $table->foreignId('upline_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('bank_name')->nullable();
+            $table->string('bank_account')->nullable();
+            $table->decimal('balance', 15, 2)->default(0);
+            $table->enum('role', ['member', 'admin'])->default('member');
             $table->rememberToken();
             $table->timestamps();
         });

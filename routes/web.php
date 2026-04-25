@@ -1,20 +1,61 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\Dashboard\CommissionController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\ProductController as DashboardProductController;
+use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\TeamController;
+use App\Http\Controllers\Dashboard\WithdrawalController as DashboardWithdrawalController;
+use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\WithdrawalController as AdminWithdrawalController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Public routes
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/p/{slug}', [HomeController::class, 'show'])->name('product.show');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Webhook (no CSRF)
+Route::post('/webhook/xendit', [WebhookController::class, 'xendit'])->name('webhook.xendit');
 
+// Download
+Route::get('/download/{token}', [DownloadController::class, 'download'])->name('download');
+
+// Auth required
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Checkout
+    Route::get('/checkout/{slug}', [CheckoutController::class, 'show'])->name('checkout');
+    Route::post('/checkout/{slug}', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
+
+    // Dashboard
+    Route::prefix('dashboard')->name('dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, 'index']);
+        Route::get('/products', [DashboardProductController::class, 'index'])->name('.products');
+        Route::get('/commissions', [CommissionController::class, 'index'])->name('.commissions');
+        Route::get('/team', [TeamController::class, 'index'])->name('.team');
+        Route::get('/withdrawals', [DashboardWithdrawalController::class, 'index'])->name('.withdrawals');
+        Route::post('/withdrawals', [DashboardWithdrawalController::class, 'store'])->name('.withdrawals.store');
+        Route::get('/settings', [SettingController::class, 'index'])->name('.settings');
+        Route::put('/settings', [SettingController::class, 'update'])->name('.settings.update');
+    });
+
+    // Admin
+    Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('index');
+        Route::resource('products', AdminProductController::class)->except(['show']);
+        Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+        Route::get('/members', [MemberController::class, 'index'])->name('members');
+        Route::get('/withdrawals', [AdminWithdrawalController::class, 'index'])->name('withdrawals');
+        Route::post('/withdrawals/{withdrawal}/approve', [AdminWithdrawalController::class, 'approve'])->name('withdrawals.approve');
+        Route::post('/withdrawals/{withdrawal}/reject', [AdminWithdrawalController::class, 'reject'])->name('withdrawals.reject');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

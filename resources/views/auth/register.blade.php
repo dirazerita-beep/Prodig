@@ -2,6 +2,13 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
+        @if(isset($ref) && $ref)
+            <input type="hidden" name="ref" value="{{ $ref }}">
+            <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+                Anda diundang oleh affiliator dengan kode: <strong>{{ $ref }}</strong>
+            </div>
+        @endif
+
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
