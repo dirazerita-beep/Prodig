@@ -34,6 +34,42 @@
                             <input type="text" name="hero_subtitle" id="hero_subtitle" value="{{ old('hero_subtitle', $lp->hero_subtitle ?? '') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                             @error('hero_subtitle') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label for="hero_title_font" class="block text-xs font-medium text-gray-700 mb-1">Font Judul</label>
+                                <select name="hero_title_font" id="hero_title_font" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                    @foreach(['Sans-serif', 'Serif', 'Monospace', 'Poppins', 'Playfair Display', 'Roboto'] as $font)
+                                        <option value="{{ $font }}" {{ old('hero_title_font', $lp->hero_title_font ?? 'Poppins') == $font ? 'selected' : '' }}>{{ $font }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="hero_title_size" class="block text-xs font-medium text-gray-700 mb-1">Ukuran Judul</label>
+                                <select name="hero_title_size" id="hero_title_size" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                    @foreach(['32px', '40px', '48px', '56px', '64px'] as $size)
+                                        <option value="{{ $size }}" {{ old('hero_title_size', $lp->hero_title_size ?? '48px') == $size ? 'selected' : '' }}>{{ $size }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="hero_title_color" class="block text-xs font-medium text-gray-700 mb-1">Warna Judul</label>
+                                <input type="color" name="hero_title_color" id="hero_title_color" value="{{ old('hero_title_color', $lp->hero_title_color ?? '#ffffff') }}" class="w-full h-9 border-gray-300 rounded-lg shadow-sm cursor-pointer">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="hero_subtitle_font" class="block text-xs font-medium text-gray-700 mb-1">Font Subjudul</label>
+                                <select name="hero_subtitle_font" id="hero_subtitle_font" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                    @foreach(['Sans-serif', 'Serif', 'Monospace', 'Poppins', 'Playfair Display', 'Roboto'] as $font)
+                                        <option value="{{ $font }}" {{ old('hero_subtitle_font', $lp->hero_subtitle_font ?? 'Poppins') == $font ? 'selected' : '' }}>{{ $font }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="hero_subtitle_color" class="block text-xs font-medium text-gray-700 mb-1">Warna Subjudul</label>
+                                <input type="color" name="hero_subtitle_color" id="hero_subtitle_color" value="{{ old('hero_subtitle_color', $lp->hero_subtitle_color ?? '#e2e8f0') }}" class="w-full h-9 border-gray-300 rounded-lg shadow-sm cursor-pointer">
+                            </div>
+                        </div>
                         <div>
                             <label for="hero_image" class="block text-sm font-medium text-gray-700 mb-1">Gambar Hero</label>
                             @if($lp && $lp->hero_image)
@@ -69,11 +105,46 @@
                 {{-- About Content --}}
                 <div class="border-b border-gray-200 pb-6">
                     <h3 class="text-sm font-semibold text-gray-800 uppercase tracking-wider mb-4">Deskripsi Detail</h3>
-                    <div>
-                        <label for="about_content" class="block text-sm font-medium text-gray-700 mb-1">Konten tentang produk</label>
-                        <textarea name="about_content" id="about_content" rows="10" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('about_content', $lp->about_content ?? '') }}</textarea>
-                        <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting.</p>
-                        @error('about_content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    <div class="space-y-4">
+                        <div>
+                            <label for="about_content" class="block text-sm font-medium text-gray-700 mb-1">Konten tentang produk</label>
+                            <textarea name="about_content" id="about_content" rows="10" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('about_content', $lp->about_content ?? '') }}</textarea>
+                            <p class="text-xs text-gray-500 mt-1">Mendukung HTML untuk formatting.</p>
+                            @error('about_content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label for="about_font" class="block text-xs font-medium text-gray-700 mb-1">Font Deskripsi</label>
+                                <select name="about_font" id="about_font" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                    @foreach(['Sans-serif', 'Serif', 'Monospace', 'Poppins', 'Playfair Display', 'Roboto'] as $font)
+                                        <option value="{{ $font }}" {{ old('about_font', $lp->about_font ?? 'Poppins') == $font ? 'selected' : '' }}>{{ $font }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="about_color" class="block text-xs font-medium text-gray-700 mb-1">Warna Font</label>
+                                <input type="color" name="about_color" id="about_color" value="{{ old('about_color', $lp->about_color ?? '#374151') }}" class="w-full h-9 border-gray-300 rounded-lg shadow-sm cursor-pointer">
+                            </div>
+                            <div>
+                                <label for="about_bg_color" class="block text-xs font-medium text-gray-700 mb-1">Warna Background</label>
+                                <input type="color" name="about_bg_color" id="about_bg_color" value="{{ old('about_bg_color', $lp->about_bg_color ?? '#ffffff') }}" class="w-full h-9 border-gray-300 rounded-lg shadow-sm cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Testimonial Styling --}}
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-sm font-semibold text-gray-800 uppercase tracking-wider mb-4">Tampilan Testimonial</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="testimonial_title_color" class="block text-xs font-medium text-gray-700 mb-1">Warna Judul Section</label>
+                            <input type="color" name="testimonial_title_color" id="testimonial_title_color" value="{{ old('testimonial_title_color', $lp->testimonial_title_color ?? '#111827') }}" class="w-full h-9 border-gray-300 rounded-lg shadow-sm cursor-pointer">
+                        </div>
+                        <div>
+                            <label for="testimonial_bg_color" class="block text-xs font-medium text-gray-700 mb-1">Warna Background Section</label>
+                            <input type="color" name="testimonial_bg_color" id="testimonial_bg_color" value="{{ old('testimonial_bg_color', $lp->testimonial_bg_color ?? '#f9fafb') }}" class="w-full h-9 border-gray-300 rounded-lg shadow-sm cursor-pointer">
+                        </div>
                     </div>
                 </div>
 
