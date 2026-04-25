@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ImageResizer;
 use App\Http\Controllers\Controller;
 use App\Models\LandingPageImage;
 use App\Models\LandingPageTestimonial;
@@ -37,7 +38,7 @@ class LandingPageController extends Controller
         ];
 
         if ($request->hasFile('hero_image')) {
-            $data['hero_image'] = $request->file('hero_image')->store('landing-pages', 'public');
+            $data['hero_image'] = ImageResizer::resizeHero($request->file('hero_image'));
         }
 
         $product->landingPage()->updateOrCreate(
@@ -61,7 +62,7 @@ class LandingPageController extends Controller
         $maxOrder = $product->landingPageImages()->max('sort_order') ?? 0;
 
         foreach ($request->file('images') as $index => $image) {
-            $path = $image->store('landing-pages/gallery', 'public');
+            $path = ImageResizer::resizeGallery($image);
             $caption = $request->input("captions.{$index}");
 
             $product->landingPageImages()->create([
@@ -114,7 +115,7 @@ class LandingPageController extends Controller
         ];
 
         if ($request->hasFile('avatar')) {
-            $data['avatar'] = $request->file('avatar')->store('landing-pages/avatars', 'public');
+            $data['avatar'] = ImageResizer::resizeAvatar($request->file('avatar'));
         }
 
         $product->landingPageTestimonials()->create($data);
@@ -141,7 +142,7 @@ class LandingPageController extends Controller
         ];
 
         if ($request->hasFile('avatar')) {
-            $data['avatar'] = $request->file('avatar')->store('landing-pages/avatars', 'public');
+            $data['avatar'] = ImageResizer::resizeAvatar($request->file('avatar'));
         }
 
         $testimonial->update($data);

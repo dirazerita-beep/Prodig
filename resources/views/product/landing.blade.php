@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>img { max-width: 100%; height: auto; }</style>
 </head>
 <body class="font-sans antialiased bg-white">
 
@@ -33,8 +34,8 @@
     {{-- Hero Section --}}
     <section class="relative pt-16">
         @if($landingPage->hero_image)
-            <div class="relative h-[500px] sm:h-[600px]">
-                <img src="{{ asset('storage/' . $landingPage->hero_image) }}" alt="{{ $landingPage->hero_title }}" class="w-full h-full object-cover">
+            <div class="relative" style="height: 500px;">
+                <img src="{{ asset('storage/' . $landingPage->hero_image) }}" alt="{{ $landingPage->hero_title }}" class="w-full object-cover" style="width: 100%; height: 500px; object-fit: cover;">
                 <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="text-center px-4 max-w-4xl">
@@ -117,7 +118,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($product->landingPageImages as $image)
                     <div class="group rounded-xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
-                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->caption ?? $product->title }}" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->caption ?? $product->title }}" class="w-full object-cover group-hover:scale-105 transition-transform duration-300" style="height: 250px; object-fit: cover;">
                         @if($image->caption)
                             <div class="p-3">
                                 <p class="text-sm text-gray-600">{{ $image->caption }}</p>
