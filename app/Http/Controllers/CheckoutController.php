@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -15,6 +16,49 @@ class CheckoutController extends Controller
     {
         $product = Product::where('slug', $slug)->where('is_active', true)->firstOrFail();
         return view('checkout', compact('product'));
+    }
+
+    public function applyCoupon(Request $request, string $slug)
+    {
+        $request->validate([
+            'coupon_code' => 'required|string',
+        ]);
+
+        $product = Product::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $user = $request->user();
+        $coupon = Coupon::where('code', strtoupper($request->coupon_code))->first();
+
+        if (!$coupon) {
+            return response()->json(['success' => false, 'message' => 'Kode kupon tidak ditemukan.']);
+        }
+
+        if (!$coupon->isValidForUser($user)) {
+            return response()->json(['success' => false, 'message' => 'Kupon tidak valid untuk akun Anda.']);
+        }
+
+        if (!$coupon->isValidForProduct($product)) {
+            return response()->json(['success' => false, 'message' => 'Kupon tidak berlaku untuk produk ini.']);
+        }
+
+        if ($product->price < $coupon->min_purchase) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Minimal pembelian Rp ' . number_format($coupon->min_purchase, 0, ',', '.') . ' untuk menggunakan kupon ini.',
+            ]);
+        }
+
+        $discount = $coupon->calculateDiscount($product->price);
+        $finalPrice = $product->price - $discount;
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Kupon berhasil diterapkan!',
+            'discount' => $discount,
+            'discount_formatted' => 'Rp ' . number_format($discount, 0, ',', '.'),
+            'final_price' => $finalPrice,
+            'final_price_formatted' => 'Rp ' . number_format($finalPrice, 0, ',', '.'),
+            'coupon_name' => $coupon->name,
+        ]);
     }
 
     public function process(Request $request, string $slug)
@@ -34,12 +78,30 @@ class CheckoutController extends Controller
             }
         }
 
+        $amount = $product->price;
+        $couponCode = null;
+        $discountAmount = 0;
+
+        if ($request->filled('coupon_code')) {
+            $coupon = Coupon::where('code', strtoupper($request->coupon_code))->first();
+
+            if ($coupon && $coupon->isValidForUser($user) && $coupon->isValidForProduct($product)) {
+                $discountAmount = $coupon->calculateDiscount($product->price);
+                $amount = $product->price - $discountAmount;
+                $couponCode = $coupon->code;
+
+                $coupon->increment('used_count');
+            }
+        }
+
         $order = Order::create([
             'user_id' => $user->id,
             'product_id' => $product->id,
             'affiliate_id' => $affiliateId,
             'upline_id' => $uplineId,
-            'amount' => $product->price,
+            'amount' => $amount,
+            'coupon_code' => $couponCode,
+            'discount_amount' => $discountAmount,
             'status' => 'pending',
             'download_token' => Str::uuid()->toString(),
         ]);
@@ -47,7 +109,7 @@ class CheckoutController extends Controller
         $xendit = new XenditService();
         $invoice = $xendit->createInvoice([
             'external_id' => 'ORDER-' . $order->id,
-            'amount' => $product->price,
+            'amount' => $amount,
             'payer_email' => $user->email,
             'description' => 'Pembelian: ' . $product->title,
             'success_redirect_url' => route('checkout.success', $order->id),
