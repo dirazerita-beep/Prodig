@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\WithdrawalController as AdminWithdrawalController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function () {
     // Checkout
     Route::get('/checkout/{slug}', [CheckoutController::class, 'show'])->name('checkout');
     Route::post('/checkout/{slug}', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::post('/checkout/{slug}/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.apply-coupon');
     Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
 
     // Dashboard
@@ -52,6 +54,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('products', AdminProductController::class)->except(['show']);
         Route::get('/orders', [OrderController::class, 'index'])->name('orders');
         Route::get('/members', [MemberController::class, 'index'])->name('members');
+        Route::get('/members/{user}/edit', [MemberController::class, 'edit'])->name('members.edit');
+        Route::put('/members/{user}', [MemberController::class, 'update'])->name('members.update');
+        Route::delete('/members/{user}', [MemberController::class, 'destroy'])->name('members.destroy');
+        Route::resource('coupons', CouponController::class);
+        Route::post('/coupons/generate-code', [CouponController::class, 'generateCode'])->name('coupons.generate-code');
         Route::get('/withdrawals', [AdminWithdrawalController::class, 'index'])->name('withdrawals');
         Route::post('/withdrawals/{withdrawal}/approve', [AdminWithdrawalController::class, 'approve'])->name('withdrawals.approve');
         Route::post('/withdrawals/{withdrawal}/reject', [AdminWithdrawalController::class, 'reject'])->name('withdrawals.reject');

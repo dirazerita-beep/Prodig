@@ -17,6 +17,8 @@ class Order extends Model
         'affiliate_id',
         'upline_id',
         'amount',
+        'coupon_code',
+        'discount_amount',
         'status',
         'xendit_id',
         'download_token',
