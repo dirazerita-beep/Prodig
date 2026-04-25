@@ -27,6 +27,16 @@ class LandingPageController extends Controller
             'video_url' => 'nullable|url|max:500',
             'about_content' => 'nullable|string',
             'is_published' => 'nullable',
+            'hero_title_font' => 'nullable|string|max:50',
+            'hero_title_size' => 'nullable|string|max:10',
+            'hero_title_color' => 'nullable|string|max:10',
+            'hero_subtitle_font' => 'nullable|string|max:50',
+            'hero_subtitle_color' => 'nullable|string|max:10',
+            'about_font' => 'nullable|string|max:50',
+            'about_color' => 'nullable|string|max:10',
+            'about_bg_color' => 'nullable|string|max:10',
+            'testimonial_title_color' => 'nullable|string|max:10',
+            'testimonial_bg_color' => 'nullable|string|max:10',
         ]);
 
         $data = [
@@ -35,6 +45,16 @@ class LandingPageController extends Controller
             'video_url' => $request->video_url,
             'about_content' => $request->about_content,
             'is_published' => $request->boolean('is_published'),
+            'hero_title_font' => $request->input('hero_title_font', 'Poppins'),
+            'hero_title_size' => $request->input('hero_title_size', '48px'),
+            'hero_title_color' => $request->input('hero_title_color', '#ffffff'),
+            'hero_subtitle_font' => $request->input('hero_subtitle_font', 'Poppins'),
+            'hero_subtitle_color' => $request->input('hero_subtitle_color', '#e2e8f0'),
+            'about_font' => $request->input('about_font', 'Poppins'),
+            'about_color' => $request->input('about_color', '#374151'),
+            'about_bg_color' => $request->input('about_bg_color', '#ffffff'),
+            'testimonial_title_color' => $request->input('testimonial_title_color', '#111827'),
+            'testimonial_bg_color' => $request->input('testimonial_bg_color', '#f9fafb'),
         ];
 
         if ($request->hasFile('hero_image')) {

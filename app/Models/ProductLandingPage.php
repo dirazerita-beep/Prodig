@@ -18,6 +18,16 @@ class ProductLandingPage extends Model
         'video_url',
         'about_content',
         'is_published',
+        'hero_title_font',
+        'hero_title_size',
+        'hero_title_color',
+        'hero_subtitle_font',
+        'hero_subtitle_color',
+        'about_font',
+        'about_color',
+        'about_bg_color',
+        'testimonial_title_color',
+        'testimonial_bg_color',
     ];
 
     protected function casts(): array
