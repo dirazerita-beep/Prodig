@@ -29,11 +29,12 @@ class ProductController extends Controller
             'commission_percent' => 'required|numeric|min:0|max:100',
             'upline_percent' => 'required|numeric|min:0|max:100',
             'file' => 'required|file|max:102400',
+            'thumbnail' => 'nullable|image|max:5120',
         ]);
 
         $filePath = $request->file('file')->store('products', 'local');
 
-        Product::create([
+        $data = [
             'title' => $request->title,
             'slug' => Str::slug($request->title),
             'description' => $request->description,
@@ -41,7 +42,13 @@ class ProductController extends Controller
             'commission_percent' => $request->commission_percent,
             'upline_percent' => $request->upline_percent,
             'file_path' => $filePath,
-        ]);
+        ];
+
+        if ($request->hasFile('thumbnail')) {
+            $data['thumbnail'] = $request->file('thumbnail')->store('products', 'public');
+        }
+
+        Product::create($data);
 
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
@@ -60,6 +67,7 @@ class ProductController extends Controller
             'commission_percent' => 'required|numeric|min:0|max:100',
             'upline_percent' => 'required|numeric|min:0|max:100',
             'file' => 'nullable|file|max:102400',
+            'thumbnail' => 'nullable|image|max:5120',
         ]);
 
         $data = [
@@ -74,6 +82,10 @@ class ProductController extends Controller
 
         if ($request->hasFile('file')) {
             $data['file_path'] = $request->file('file')->store('products', 'local');
+        }
+
+        if ($request->hasFile('thumbnail')) {
+            $data['thumbnail'] = $request->file('thumbnail')->store('products', 'public');
         }
 
         $product->update($data);

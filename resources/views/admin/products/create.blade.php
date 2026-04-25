@@ -41,6 +41,13 @@
                 </div>
 
                 <div>
+                    <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-1">Thumbnail Produk (opsional)</label>
+                    <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="w-full border-gray-300 rounded-lg shadow-sm">
+                    <p class="text-xs text-gray-500 mt-1">Gambar thumbnail produk. Maks 5MB.</p>
+                    @error('thumbnail') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
                     <label for="file" class="block text-sm font-medium text-gray-700 mb-1">File Produk</label>
                     <input type="file" name="file" id="file" class="w-full border-gray-300 rounded-lg shadow-sm" required>
                     @error('file') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror

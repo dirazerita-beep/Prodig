@@ -21,6 +21,7 @@ class Product extends Model
         'commission_percent',
         'upline_percent',
         'file_path',
+        'thumbnail',
         'is_active',
     ];
 
