@@ -11,6 +11,7 @@
             $heroImage = $lp && $lp->hero_image ? asset('storage/' . $lp->hero_image) : null;
             $affiliateLink = url('/p/' . $product->slug . '?ref=' . $user->referral_code);
             $commissionAmount = $product->price * $product->commission_percent / 100;
+            $uplineAmount = $product->price * $product->upline_percent / 100;
         @endphp
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             {{-- Thumbnail --}}
@@ -27,8 +28,9 @@
             {{-- Content --}}
             <div class="p-4">
                 <h3 class="text-lg font-bold text-gray-900 truncate mb-1">{{ $product->title }}</h3>
-                <p class="text-lg font-bold text-indigo-600 mb-2">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                <p class="text-sm text-green-600 font-medium mb-4">Komisi kamu: Rp {{ number_format($commissionAmount, 0, ',', '.') }} per penjualan</p>
+                <p class="text-lg font-bold text-indigo-600 mb-1">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                <p class="text-sm text-green-600 font-medium">Komisi kamu: Rp {{ number_format($commissionAmount, 0, ',', '.') }} per penjualan</p>
+                <p class="text-xs text-purple-500 mb-4">Bonus upline: Rp {{ number_format($uplineAmount, 0, ',', '.') }} per penjualan downline</p>
 
                 {{-- Buttons --}}
                 <div class="space-y-2">
@@ -46,12 +48,51 @@
     @endforeach
 </div>
 
+{{-- Downline Section --}}
+<div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">Downline kamu ({{ $downlines->count() }} orang)</h2>
+
+    @if($downlines->count() > 0)
+        <div class="flex flex-wrap gap-3 mb-4">
+            @foreach($downlines->take(5) as $downline)
+                <div class="flex items-center gap-2 bg-gray-50 rounded-full px-3 py-1.5">
+                    <div class="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center">
+                        <span class="text-indigo-600 font-semibold text-xs">{{ strtoupper(substr($downline->name, 0, 1)) }}</span>
+                    </div>
+                    <span class="text-sm text-gray-700">{{ $downline->name }}</span>
+                </div>
+            @endforeach
+            @if($downlines->count() > 5)
+                <div class="flex items-center px-3 py-1.5">
+                    <span class="text-sm text-gray-500">+{{ $downlines->count() - 5 }} lainnya</span>
+                </div>
+            @endif
+        </div>
+    @else
+        <p class="text-sm text-gray-500 mb-4">Belum ada downline. Ajak teman bergabung!</p>
+    @endif
+
+    @php
+        $registerLink = url('/register?ref=' . $user->referral_code);
+    @endphp
+    <div class="border-t border-gray-100 pt-4">
+        <p class="text-sm text-gray-600 mb-2">Link ajak teman:</p>
+        <div class="flex items-center gap-2">
+            <input type="text" readonly value="{{ $registerLink }}" class="flex-1 text-xs bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
+            <button onclick="copyLink('{{ $registerLink }}', this)" class="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium transition-colors whitespace-nowrap">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                Salin
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
 function copyLink(link, btn) {
     navigator.clipboard.writeText(link).then(function() {
         var originalText = btn.innerHTML;
         btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Link berhasil disalin!';
-        btn.classList.remove('bg-gray-100', 'text-gray-700');
+        btn.classList.remove('bg-gray-100', 'text-gray-700', 'bg-indigo-600');
         btn.classList.add('bg-green-100', 'text-green-700');
         setTimeout(function() {
             btn.innerHTML = originalText;
