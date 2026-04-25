@@ -94,18 +94,10 @@
     {{-- Product Info --}}
     <section class="py-16 sm:py-20 bg-gray-50">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+            <div class="flex justify-center">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 text-center">
                     <div class="text-sm text-gray-500 mb-1">Harga</div>
                     <div class="text-3xl font-bold text-indigo-600">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
-                </div>
-                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                    <div class="text-sm text-gray-500 mb-1">Komisi Affiliator</div>
-                    <div class="text-3xl font-bold text-green-600">{{ $product->commission_percent }}%</div>
-                </div>
-                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                    <div class="text-sm text-gray-500 mb-1">Bonus Upline</div>
-                    <div class="text-3xl font-bold text-blue-600">{{ $product->upline_percent }}%</div>
                 </div>
             </div>
         </div>
@@ -138,27 +130,25 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center mb-4" style="color: {{ $landingPage->testimonial_title_color ?? '#111827' }};">Apa Kata Mereka</h2>
             <p class="text-gray-600 text-center mb-10 max-w-2xl mx-auto">Testimonial dari pengguna yang sudah merasakan manfaat produk ini.</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($product->landingPageTestimonials as $testimonial)
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex gap-4 items-start max-w-full overflow-hidden">
-                        <div class="flex-shrink-0">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+                        <div class="flex justify-center mb-3">
                             @if($testimonial->avatar)
-                                <img src="{{ asset('storage/' . $testimonial->avatar) }}" alt="{{ $testimonial->name }}" class="rounded-full object-cover" style="width: 64px; height: 64px;">
+                                <img src="{{ asset('storage/' . $testimonial->avatar) }}" alt="{{ $testimonial->name }}" class="rounded-full object-cover mx-auto" style="width: 64px; height: 64px;">
                             @else
-                                <div class="rounded-full bg-indigo-100 flex items-center justify-center" style="width: 64px; height: 64px;">
+                                <div class="rounded-full bg-indigo-100 flex items-center justify-center mx-auto" style="width: 64px; height: 64px;">
                                     <span class="text-indigo-600 font-bold text-xl">{{ strtoupper(substr($testimonial->name, 0, 1)) }}</span>
                                 </div>
                             @endif
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-semibold text-gray-900 text-sm">{{ $testimonial->name }}</p>
-                            <div class="flex items-center gap-0.5 mb-2">
-                                @for($i = 1; $i <= 5; $i++)
-                                    <svg class="w-4 h-4 {{ $i <= $testimonial->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                @endfor
-                            </div>
-                            <p class="text-gray-600 text-sm leading-relaxed">{{ $testimonial->content }}</p>
+                        <p class="font-semibold text-gray-900 text-sm mb-1">{{ $testimonial->name }}</p>
+                        <div class="flex items-center justify-center gap-0.5 mb-3">
+                            @for($i = 1; $i <= 5; $i++)
+                                <svg class="w-4 h-4 {{ $i <= $testimonial->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            @endfor
                         </div>
+                        <p class="text-gray-600 text-sm leading-relaxed">{{ $testimonial->content }}</p>
                     </div>
                 @endforeach
             </div>
