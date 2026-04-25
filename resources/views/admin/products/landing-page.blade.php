@@ -74,7 +74,7 @@
                             <label for="hero_image" class="block text-sm font-medium text-gray-700 mb-1">Gambar Hero</label>
                             @if($lp && $lp->hero_image)
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $lp->hero_image) }}" alt="Hero" class="h-32 rounded-lg object-cover">
+                                    <img src="{{ asset('storage/' . $lp->hero_image) }}" alt="Hero" class="w-full rounded-lg object-cover" style="max-height: 200px;">
                                 </div>
                             @endif
                             <input type="file" name="hero_image" id="hero_image" accept="image/*" class="w-full border-gray-300 rounded-lg shadow-sm">
@@ -92,10 +92,10 @@
                         <input type="url" name="video_url" id="video_url" value="{{ old('video_url', $lp->video_url ?? '') }}" placeholder="https://www.youtube.com/watch?v=..." class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                         @error('video_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         @if($lp && $lp->video_url)
-                            <div class="mt-3">
+                            <div class="mt-3" style="max-width: 560px;">
                                 <p class="text-xs text-gray-500 mb-1">Preview:</p>
-                                <div class="aspect-video rounded-lg overflow-hidden bg-gray-100">
-                                    <iframe src="{{ \App\Helpers\VideoHelper::getEmbedUrl($lp->video_url) }}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                                <div class="rounded-lg overflow-hidden bg-gray-100" style="position: relative; padding-bottom: 56.25%; height: 0;">
+                                    <iframe src="{{ \App\Helpers\VideoHelper::getEmbedUrl($lp->video_url) }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe>
                                 </div>
                             </div>
                         @endif
@@ -171,10 +171,10 @@
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Galeri Gambar</h2>
 
         @if($product->landingPageImages->count() > 0)
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6" id="gallery-grid">
+            <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 mb-6" id="gallery-grid">
                 @foreach($product->landingPageImages as $image)
                     <div class="relative group rounded-lg overflow-hidden border border-gray-200" data-id="{{ $image->id }}">
-                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->caption }}" class="w-full h-32 object-cover">
+                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->caption }}" class="object-cover" style="width: 120px; height: 120px;">
                         @if($image->caption)
                             <p class="text-xs text-gray-600 p-2 truncate">{{ $image->caption }}</p>
                         @endif
@@ -219,9 +219,9 @@
                         <div class="flex items-start justify-between">
                             <div class="flex items-center gap-3">
                                 @if($testimonial->avatar)
-                                    <img src="{{ asset('storage/' . $testimonial->avatar) }}" alt="{{ $testimonial->name }}" class="w-10 h-10 rounded-full object-cover">
+                                    <img src="{{ asset('storage/' . $testimonial->avatar) }}" alt="{{ $testimonial->name }}" class="rounded-full object-cover" style="width: 80px; height: 80px; max-width: 80px;">
                                 @else
-                                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                    <div class="rounded-full bg-indigo-100 flex items-center justify-center" style="width: 80px; height: 80px; min-width: 80px;">
                                         <span class="text-indigo-600 font-semibold text-sm">{{ strtoupper(substr($testimonial->name, 0, 1)) }}</span>
                                     </div>
                                 @endif

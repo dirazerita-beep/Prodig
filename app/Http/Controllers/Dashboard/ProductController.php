@@ -12,7 +12,8 @@ class ProductController extends Controller
     {
         $products = Product::with('landingPage')->where('is_active', true)->get();
         $user = $request->user();
+        $downlines = $user->downlines()->select('id', 'name')->get();
 
-        return view('dashboard.products', compact('products', 'user'));
+        return view('dashboard.products', compact('products', 'user', 'downlines'));
     }
 }
