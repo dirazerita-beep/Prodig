@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::where('is_active', true)->get();
+        $products = Product::with('landingPage')->where('is_active', true)->get();
         $user = $request->user();
 
         return view('dashboard.products', compact('products', 'user'));

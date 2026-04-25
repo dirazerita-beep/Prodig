@@ -11,21 +11,9 @@
             <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ $product->title }}</h1>
             <p class="text-gray-600 mb-6 leading-relaxed">{{ $product->description }}</p>
 
-            <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                <div class="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                        <div class="text-sm text-gray-500">Harga</div>
-                        <div class="text-2xl font-bold text-indigo-600">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-gray-500">Komisi Affiliator</div>
-                        <div class="text-2xl font-bold text-green-600">{{ $product->commission_percent }}%</div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-gray-500">Bonus Upline</div>
-                        <div class="text-2xl font-bold text-blue-600">{{ $product->upline_percent }}%</div>
-                    </div>
-                </div>
+            <div class="bg-gray-50 rounded-lg p-6 mb-6 text-center">
+                <div class="text-sm text-gray-500">Harga</div>
+                <div class="text-2xl font-bold text-indigo-600">Rp {{ number_format($product->price, 0, ',', '.') }}</div>
             </div>
 
             <div class="flex gap-4">
