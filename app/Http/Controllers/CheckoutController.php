@@ -14,7 +14,7 @@ class CheckoutController extends Controller
 {
     public function show(string $slug)
     {
-        $product = Product::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $product = Product::with('landingPage')->where('slug', $slug)->where('is_active', true)->firstOrFail();
         return view('checkout', compact('product'));
     }
 

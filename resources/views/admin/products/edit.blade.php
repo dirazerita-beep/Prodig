@@ -55,6 +55,18 @@
                 </div>
 
                 <div>
+                    <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-1">Thumbnail Produk</label>
+                    @if($product->thumbnail)
+                        <div class="mb-2">
+                            <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="Thumbnail" class="rounded-lg object-cover" style="width: 120px; height: 120px;">
+                        </div>
+                    @endif
+                    <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="w-full border-gray-300 rounded-lg shadow-sm">
+                    <p class="text-xs text-gray-500 mt-1">Maks 5MB. Kosongkan jika tidak ingin mengubah.</p>
+                    @error('thumbnail') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
                     <label for="file" class="block text-sm font-medium text-gray-700 mb-1">File Produk (kosongkan jika tidak ingin mengubah)</label>
                     <input type="file" name="file" id="file" class="w-full border-gray-300 rounded-lg shadow-sm">
                     <p class="text-xs text-gray-500 mt-1">File saat ini: {{ $product->file_path }}</p>
