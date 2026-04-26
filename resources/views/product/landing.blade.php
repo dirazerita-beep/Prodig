@@ -45,9 +45,15 @@
                             <p class="text-lg sm:text-xl mb-8 max-w-2xl mx-auto" style="font-family: '{{ $landingPage->hero_subtitle_font ?? 'Poppins' }}', sans-serif; color: {{ $landingPage->hero_subtitle_color ?? '#e2e8f0' }};">{{ $landingPage->hero_subtitle }}</p>
                         @endif
                         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <a href="{{ route('checkout', $product->slug) }}" class="bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 font-bold text-lg shadow-lg shadow-indigo-500/30 transition-all hover:scale-105">
-                                Beli Sekarang — Rp {{ number_format($product->price, 0, ',', '.') }}
-                            </a>
+                            @auth
+                                <a href="{{ route('checkout', $product->slug) }}" class="bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 font-bold text-lg shadow-lg shadow-indigo-500/30 transition-all hover:scale-105">
+                                    Beli Sekarang — Rp {{ number_format($product->price, 0, ',', '.') }}
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-8 py-4 rounded-xl hover:bg-indigo-700 font-bold text-lg shadow-lg shadow-indigo-500/30 transition-all hover:scale-105">
+                                    Beli Sekarang — Rp {{ number_format($product->price, 0, ',', '.') }}
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 </div>
@@ -59,9 +65,15 @@
                     @if($landingPage->hero_subtitle)
                         <p class="text-lg sm:text-xl mb-8 max-w-2xl mx-auto" style="font-family: '{{ $landingPage->hero_subtitle_font ?? 'Poppins' }}', sans-serif; color: {{ $landingPage->hero_subtitle_color ?? '#e2e8f0' }};">{{ $landingPage->hero_subtitle }}</p>
                     @endif
-                    <a href="{{ route('checkout', $product->slug) }}" class="inline-block bg-white text-indigo-700 px-8 py-4 rounded-xl hover:bg-gray-50 font-bold text-lg shadow-lg transition-all hover:scale-105">
-                        Beli Sekarang — Rp {{ number_format($product->price, 0, ',', '.') }}
-                    </a>
+                    @auth
+                        <a href="{{ route('checkout', $product->slug) }}" class="inline-block bg-white text-indigo-700 px-8 py-4 rounded-xl hover:bg-gray-50 font-bold text-lg shadow-lg transition-all hover:scale-105">
+                            Beli Sekarang — Rp {{ number_format($product->price, 0, ',', '.') }}
+                        </a>
+                    @else
+                        <a href="{{ route('register') }}" class="inline-block bg-white text-indigo-700 px-8 py-4 rounded-xl hover:bg-gray-50 font-bold text-lg shadow-lg transition-all hover:scale-105">
+                            Beli Sekarang — Rp {{ number_format($product->price, 0, ',', '.') }}
+                        </a>
+                    @endauth
                 </div>
             </div>
         @endif
@@ -161,9 +173,15 @@
         <div class="max-w-4xl mx-auto text-center px-4">
             <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Siap untuk Memulai?</h2>
             <p class="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">Dapatkan {{ $product->title }} sekarang dan mulai perjalanan Anda.</p>
-            <a href="{{ route('checkout', $product->slug) }}" class="inline-block bg-white text-indigo-700 px-8 py-4 rounded-xl hover:bg-gray-50 font-bold text-lg shadow-lg transition-all hover:scale-105">
-                Beli Sekarang — Rp {{ number_format($product->price, 0, ',', '.') }}
-            </a>
+            @auth
+                <a href="{{ route('checkout', $product->slug) }}" class="inline-block bg-white text-indigo-700 px-8 py-4 rounded-xl hover:bg-gray-50 font-bold text-lg shadow-lg transition-all hover:scale-105">
+                    Beli Sekarang — Rp {{ number_format($product->price, 0, ',', '.') }}
+                </a>
+            @else
+                <a href="{{ route('register') }}" class="inline-block bg-white text-indigo-700 px-8 py-4 rounded-xl hover:bg-gray-50 font-bold text-lg shadow-lg transition-all hover:scale-105">
+                    Beli Sekarang — Rp {{ number_format($product->price, 0, ',', '.') }}
+                </a>
+            @endauth
         </div>
     </section>
 
@@ -184,9 +202,15 @@
             <div class="sm:hidden">
                 <p class="text-indigo-600 font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
             </div>
-            <a href="{{ route('checkout', $product->slug) }}" class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 font-bold text-sm sm:text-base shadow-md transition-all hover:scale-105 whitespace-nowrap">
-                Beli Sekarang
-            </a>
+            @auth
+                <a href="{{ route('checkout', $product->slug) }}" class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 font-bold text-sm sm:text-base shadow-md transition-all hover:scale-105 whitespace-nowrap">
+                    Beli Sekarang
+                </a>
+            @else
+                <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 font-bold text-sm sm:text-base shadow-md transition-all hover:scale-105 whitespace-nowrap">
+                    Beli Sekarang
+                </a>
+            @endauth
         </div>
     </div>
 

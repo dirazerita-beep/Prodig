@@ -5,7 +5,11 @@
         @if(isset($ref) && $ref)
             <input type="hidden" name="ref" value="{{ $ref }}">
             <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-                Anda diundang oleh affiliator dengan kode: <strong>{{ $ref }}</strong>
+                @if(isset($refMemberName) && $refMemberName)
+                    Anda mendaftar melalui referral <strong>{{ $refMemberName }}</strong>
+                @else
+                    Anda diundang oleh affiliator dengan kode: <strong>{{ $ref }}</strong>
+                @endif
             </div>
         @endif
 
@@ -21,6 +25,13 @@
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
+
+        <!-- Nomor WhatsApp -->
+        <div class="mt-4">
+            <x-input-label for="whatsapp_number" value="Nomor WhatsApp" />
+            <x-text-input id="whatsapp_number" class="block mt-1 w-full" type="tel" name="whatsapp_number" :value="old('whatsapp_number')" placeholder="Contoh: 08123456789" autocomplete="tel" />
+            <x-input-error :messages="$errors->get('whatsapp_number')" class="mt-2" />
         </div>
 
         <!-- Password -->

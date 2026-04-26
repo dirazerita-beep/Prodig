@@ -17,8 +17,17 @@ class RegisteredUserController extends Controller
 {
     public function create(Request $request): View
     {
-        $ref = $request->get('ref', $request->cookie('ref'));
-        return view('auth.register', compact('ref'));
+        $ref = $request->get('ref', $request->cookie('ref') ?? session('ref_code'));
+
+        $refMemberName = null;
+        if ($ref) {
+            $refMember = User::where('referral_code', $ref)->first();
+            if ($refMember) {
+                $refMemberName = $refMember->name;
+            }
+        }
+
+        return view('auth.register', compact('ref', 'refMemberName'));
     }
 
     /**
@@ -29,11 +38,12 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'whatsapp_number' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $uplineId = null;
-        $refCode = $request->input('ref', $request->cookie('ref'));
+        $refCode = $request->input('ref', $request->cookie('ref') ?? session('ref_code'));
         if ($refCode) {
             $upline = User::where('referral_code', $refCode)->first();
             if ($upline) {
@@ -44,6 +54,7 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'whatsapp_number' => $request->whatsapp_number,
             'password' => Hash::make($request->password),
             'upline_id' => $uplineId,
         ]);
@@ -51,6 +62,12 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+        $intendedSlug = session('intended_product_slug');
+        if ($intendedSlug) {
+            $redirectUrl = route('checkout', $intendedSlug);
+            return redirect($redirectUrl);
+        }
 
         return redirect(route('dashboard', absolute: false));
     }

@@ -15,7 +15,32 @@ class CheckoutController extends Controller
     public function show(string $slug)
     {
         $product = Product::with('landingPage')->where('slug', $slug)->where('is_active', true)->firstOrFail();
-        return view('checkout', compact('product'));
+
+        $autoCouponCode = session('auto_coupon');
+        $autoCouponMemberName = session('auto_coupon_member_name');
+        $autoCouponData = null;
+
+        if ($autoCouponCode) {
+            $coupon = Coupon::where('code', $autoCouponCode)->first();
+            $user = auth()->user();
+
+            if ($coupon && $user && $coupon->isValidForUser($user) && $coupon->isValidForProduct($product) && $product->price >= $coupon->min_purchase) {
+                $discount = $coupon->calculateDiscount($product->price);
+                $autoCouponData = [
+                    'code' => $coupon->code,
+                    'name' => $coupon->name,
+                    'member_name' => $autoCouponMemberName,
+                    'discount' => $discount,
+                    'discount_formatted' => 'Rp ' . number_format($discount, 0, ',', '.'),
+                    'final_price' => $product->price - $discount,
+                    'final_price_formatted' => 'Rp ' . number_format($product->price - $discount, 0, ',', '.'),
+                ];
+            }
+
+            session()->forget(['auto_coupon', 'auto_coupon_member_name', 'intended_product_slug']);
+        }
+
+        return view('checkout', compact('product', 'autoCouponData'));
     }
 
     public function applyCoupon(Request $request, string $slug)

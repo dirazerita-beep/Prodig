@@ -39,32 +39,53 @@
             </div>
         @endif
 
-        <div class="border border-gray-200 rounded-lg p-4 mb-6">
-            <label for="coupon_input" class="block text-sm font-medium text-gray-700 mb-2">Punya kode kupon?</label>
-            <div class="flex gap-2">
-                <input type="text" id="coupon_input" placeholder="Masukkan kode kupon" class="flex-1 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 uppercase text-sm">
-                <button type="button" id="apply-coupon" class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-medium text-sm whitespace-nowrap">Terapkan</button>
-            </div>
-            <div id="coupon-message" class="mt-2 text-sm hidden"></div>
-            <div id="coupon-summary" class="mt-3 hidden">
+        @if(isset($autoCouponData) && $autoCouponData)
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <div class="flex items-center gap-2 mb-2">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="text-sm font-medium text-green-700">Kupon {{ $autoCouponData['code'] }} dari {{ $autoCouponData['member_name'] }} telah diterapkan — diskon {{ $autoCouponData['discount_formatted'] }}</span>
+                </div>
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-600">Harga asli</span>
                     <span class="text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
                 </div>
                 <div class="flex justify-between text-sm mt-1">
-                    <span class="text-red-600">Diskon (<span id="coupon-name"></span>)</span>
-                    <span class="text-red-600" id="discount-value"></span>
+                    <span class="text-red-600">Diskon ({{ $autoCouponData['name'] }})</span>
+                    <span class="text-red-600">-{{ $autoCouponData['discount_formatted'] }}</span>
+                </div>
+                <div class="border-t border-green-200 mt-2 pt-2 flex justify-between">
+                    <span class="text-sm font-semibold text-gray-900">Total bayar</span>
+                    <span class="text-lg font-bold text-indigo-600">{{ $autoCouponData['final_price_formatted'] }}</span>
+                </div>
+            </div>
+        @endif
+
+        <div class="border border-gray-200 rounded-lg p-4 mb-6">
+            <label for="coupon_input" class="block text-sm font-medium text-gray-700 mb-2">Punya kode kupon?</label>
+            <div class="flex gap-2">
+                <input type="text" id="coupon_input" placeholder="Masukkan kode kupon" value="{{ isset($autoCouponData) && $autoCouponData ? $autoCouponData['code'] : '' }}" class="flex-1 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 uppercase text-sm">
+                <button type="button" id="apply-coupon" class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-medium text-sm whitespace-nowrap">Terapkan</button>
+            </div>
+            <div id="coupon-message" class="mt-2 text-sm hidden"></div>
+            <div id="coupon-summary" class="mt-3 {{ isset($autoCouponData) && $autoCouponData ? '' : 'hidden' }}">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Harga asli</span>
+                    <span class="text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                </div>
+                <div class="flex justify-between text-sm mt-1">
+                    <span class="text-red-600">Diskon (<span id="coupon-name">{{ isset($autoCouponData) && $autoCouponData ? $autoCouponData['name'] : '' }}</span>)</span>
+                    <span class="text-red-600" id="discount-value">{{ isset($autoCouponData) && $autoCouponData ? '-' . $autoCouponData['discount_formatted'] : '' }}</span>
                 </div>
                 <div class="border-t border-gray-200 mt-2 pt-2 flex justify-between">
                     <span class="text-sm font-semibold text-gray-900">Total bayar</span>
-                    <span class="text-lg font-bold text-indigo-600" id="final-price"></span>
+                    <span class="text-lg font-bold text-indigo-600" id="final-price">{{ isset($autoCouponData) && $autoCouponData ? $autoCouponData['final_price_formatted'] : '' }}</span>
                 </div>
             </div>
         </div>
 
         <form method="POST" action="{{ route('checkout.process', $product->slug) }}" id="checkout-form">
             @csrf
-            <input type="hidden" name="coupon_code" id="coupon_code_hidden" value="">
+            <input type="hidden" name="coupon_code" id="coupon_code_hidden" value="{{ isset($autoCouponData) && $autoCouponData ? $autoCouponData['code'] : '' }}">
             <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 font-bold text-lg">
                 Bayar Sekarang
             </button>

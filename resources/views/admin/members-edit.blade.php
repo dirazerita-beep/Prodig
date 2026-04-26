@@ -22,6 +22,12 @@
                 </div>
 
                 <div>
+                    <label for="whatsapp_number" class="block text-sm font-medium text-gray-700 mb-1">Nomor WhatsApp</label>
+                    <input type="tel" name="whatsapp_number" id="whatsapp_number" value="{{ old('whatsapp_number', $user->whatsapp_number) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 08123456789">
+                    @error('whatsapp_number') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
                     <label for="referral_code" class="block text-sm font-medium text-gray-700 mb-1">Kode Referral</label>
                     <input type="text" name="referral_code" id="referral_code" value="{{ old('referral_code', $user->referral_code) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 uppercase" required>
                     @error('referral_code') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror

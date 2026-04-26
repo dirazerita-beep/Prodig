@@ -17,7 +17,11 @@
             </div>
 
             <div class="flex gap-4">
-                <a href="{{ route('checkout', $product->slug) }}" class="flex-1 bg-indigo-600 text-white text-center py-3 rounded-lg hover:bg-indigo-700 font-bold text-lg">Beli Sekarang</a>
+                @auth
+                    <a href="{{ route('checkout', $product->slug) }}" class="flex-1 bg-indigo-600 text-white text-center py-3 rounded-lg hover:bg-indigo-700 font-bold text-lg">Beli Sekarang</a>
+                @else
+                    <a href="{{ route('register') }}" class="flex-1 bg-indigo-600 text-white text-center py-3 rounded-lg hover:bg-indigo-700 font-bold text-lg">Beli Sekarang</a>
+                @endauth
                 <a href="{{ route('home') }}" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium">Kembali</a>
             </div>
         </div>
