@@ -16,9 +16,23 @@
     <h2 class="text-2xl font-bold text-gray-900 mb-8">Produk Digital</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         @foreach($products as $product)
+        @php
+            $thumbUrl = null;
+            if ($product->thumbnail) {
+                $thumbUrl = asset('storage/' . $product->thumbnail);
+            } elseif ($product->landingPage && $product->landingPage->hero_image) {
+                $thumbUrl = asset('storage/' . $product->landingPage->hero_image);
+            }
+        @endphp
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 h-48 flex items-center justify-center">
-                <svg class="w-16 h-16 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            <div class="h-48 relative">
+                @if($thumbUrl)
+                    <img src="{{ $thumbUrl }}" alt="{{ $product->title }}" class="w-full h-full object-cover">
+                @else
+                    <div class="w-full h-full bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 flex items-center justify-center p-4">
+                        <span class="text-white text-lg font-bold text-center leading-snug drop-shadow-md">{{ $product->title }}</span>
+                    </div>
+                @endif
             </div>
             <div class="p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $product->title }}</h3>
@@ -26,9 +40,6 @@
                 <div class="flex items-center justify-between">
                     <span class="text-2xl font-bold text-indigo-600">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
                     <a href="{{ route('product.show', $product->slug) }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm font-medium">Detail</a>
-                </div>
-                <div class="mt-3 text-xs text-gray-500">
-                    Komisi Affiliator: {{ $product->commission_percent }}% | Bonus Upline: {{ $product->upline_percent }}%
                 </div>
             </div>
         </div>

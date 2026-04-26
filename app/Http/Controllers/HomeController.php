@@ -8,7 +8,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $products = Product::where('is_active', true)->latest()->get();
+        $products = Product::with('landingPage')->where('is_active', true)->latest()->get();
         return view('home', compact('products'));
     }
 
